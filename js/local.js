@@ -212,7 +212,13 @@
     if (!reps) return "";
     const rows = [];
     if (reps.council) {
-      rows.push(`<li><strong>${reps.council.label}</strong> — <a href="${reps.council.councillorsUrl}" target="_blank" rel="noopener noreferrer">Councillors</a> · <a href="${reps.council.mayorUrl}" target="_blank" rel="noopener noreferrer">Mayor</a> · <a href="${reps.council.contactUrl}" target="_blank" rel="noopener noreferrer">Contact</a>${reps.council.phone ? ` · ${reps.council.phone}` : ""}</li>`);
+      const sameRepPage = reps.council.mayorUrl === reps.council.councillorsUrl;
+      const repLinks = sameRepPage
+        ? `<a href="${reps.council.councillorsUrl}" target="_blank" rel="noopener noreferrer">Mayor &amp; councillors</a>`
+        : `<a href="${reps.council.councillorsUrl}" target="_blank" rel="noopener noreferrer">Councillors</a> · <a href="${reps.council.mayorUrl}" target="_blank" rel="noopener noreferrer">Mayor</a>`;
+      rows.push(
+        `<li><strong>${reps.council.label}</strong> — ${repLinks} · <a href="${reps.council.contactUrl}" target="_blank" rel="noopener noreferrer">Contact</a>${reps.council.phone ? ` · ${reps.council.phone}` : ""}</li>`
+      );
     }
     if (reps.state) {
       rows.push(`<li><strong>State MP</strong> (${reps.state.electorate}) — <a href="${reps.state.findMpUrl}" target="_blank" rel="noopener noreferrer">Find your WA member ${externalIcon}</a></li>`);

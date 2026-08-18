@@ -11,9 +11,9 @@ const SCRAPE_TARGETS = [
   { councilId: "rockingham", url: "https://yourthoughts.rockingham.wa.gov.au/" },
   { councilId: "busselton", url: "https://yoursay.busselton.wa.gov.au/" },
   { councilId: "kalgoorlie-boulder", url: "https://yoursay.ckb.wa.gov.au/" },
-  { councilId: "wanneroo", url: "https://www.wanneroo.wa.gov.au/community-and-recreation/community-engagement" },
-  { councilId: "joondalup", url: "https://www.joondalup.wa.gov.au/kb/community/community-engagement" },
-  { councilId: "stirling", url: "https://www.stirling.wa.gov.au/community-and-recreation/community-engagement" }
+  { councilId: "wanneroo", url: "https://yoursay.wanneroo.wa.gov.au/" },
+  { councilId: "joondalup", url: "https://www.joondalup.wa.gov.au/community-and-spaces/community-consultation" },
+  { councilId: "stirling", url: "https://www.stirling.wa.gov.au/city-and-council/shaping-our-city" }
 ];
 
 function extractLastUpdated(source) {
