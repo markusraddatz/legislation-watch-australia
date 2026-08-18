@@ -1,0 +1,9 @@
+{
+  "name": "legislation-watch-australia",
+  "private": true,
+  "description": "Independent Australian legislation and consultation transparency tool",
+  "scripts": {
+    "serve": "npx serve .",
+    "deploy": "wrangler pages deploy . --project-name=legislation-watch-australia"
+  }
+}

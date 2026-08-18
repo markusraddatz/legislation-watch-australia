@@ -14,7 +14,21 @@ The site is **100% static** (HTML, CSS, JavaScript). No build step, no server, n
 
 ## 1. Create the GitHub repository
 
-### Option A — New repository (recommended)
+This project is already published at:
+
+- **GitHub:** https://github.com/markusraddatz/legislation-watch-australia
+- **Live site:** https://legislation-watch-australia.pages.dev
+
+To clone elsewhere:
+
+```bash
+git clone https://github.com/markusraddatz/legislation-watch-australia.git
+cd legislation-watch-australia
+```
+
+### Option A — New repository (for your own fork)
+
+Skip this if you are using the repo above.
 
 1. On GitHub, click **New repository**.
 2. Name it e.g. `legislation-watch-australia`.
@@ -103,9 +117,10 @@ Data is updated manually in the repo (see README **Refreshing data**):
 git add data/real-data.js data/local-data.js
 git commit -m "Update consultation data"
 git push
+npm run deploy
 ```
 
-Cloudflare Pages rebuilds automatically on each push (free tier: **500 builds/month** — more than enough for manual updates).
+The project is deployed to Cloudflare Pages via Wrangler (`npm run deploy`). To enable **automatic deploy on every push**, connect the GitHub repo under Cloudflare Pages → **Settings** → **Builds & deployments** → **Connect to Git** (framework preset: None, build command empty, output directory `/`).
 
 ---
 

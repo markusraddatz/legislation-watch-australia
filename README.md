@@ -1,5 +1,8 @@
 # Legislation Watch Australia
 
+**Live site:** [legislation-watch-australia.pages.dev](https://legislation-watch-australia.pages.dev)  
+**Repository:** [github.com/markusraddatz/legislation-watch-australia](https://github.com/markusraddatz/legislation-watch-australia)
+
 An independent, neutral tool for Australian **legislation and public consultation transparency**. This is a fully static site (HTML, CSS, JavaScript) — no backend, no user accounts, and no discussion features.
 
 Legislation Watch helps citizens find **what is open for public input right now** and **what has recently been decided**, with every item linking to official government and parliamentary sources. It does not advocate for or against any policy.
@@ -17,6 +20,14 @@ Then open the URL shown (usually `http://localhost:3000`). Alternatively, open `
 **Local gov page:** `data/local-data.js` → `data/wa-council-lookup.js` → `js/local.js`
 
 No build step or `npm install` is required to run or deploy the site.
+
+**Redeploy after data updates:**
+
+```bash
+npm run deploy
+```
+
+Or: `wrangler pages deploy . --project-name=legislation-watch-australia`
 
 ## Project structure
 
