@@ -128,13 +128,29 @@
 
   function renderOfficialLinks(item) {
     const links = item.officialLinks || {};
-    const rows = [
-      links.primaryDocument ? `<li><a href="${links.primaryDocument}" target="_blank" rel="noopener noreferrer">Official project page ${externalIcon}</a></li>` : "",
-      links.howToParticipate ? `<li><a href="${links.howToParticipate}" target="_blank" rel="noopener noreferrer">How to participate ${externalIcon}</a></li>` : "",
-      links.committeeOrConsultPage ? `<li><a href="${links.committeeOrConsultPage}" target="_blank" rel="noopener noreferrer">Council engagement hub ${externalIcon}</a></li>` : ""
-    ].filter(Boolean);
-    if (!rows.length) return "";
-    return `<ul class="local-card__links">${rows.join("")}</ul>`;
+    const entries = [
+      { url: links.primaryDocument, label: "Official project page" },
+      { url: links.howToParticipate, label: "How to participate" },
+      { url: links.committeeOrConsultPage, label: "Council engagement hub" }
+    ].filter((entry) => entry.url);
+
+    const seen = new Set();
+    const unique = entries.filter((entry) => {
+      if (seen.has(entry.url)) return false;
+      seen.add(entry.url);
+      return true;
+    });
+
+    if (!unique.length) return "";
+
+    const rows = unique
+      .map(
+        (entry) =>
+          `<li><a href="${entry.url}" target="_blank" rel="noopener noreferrer">${entry.label}${externalIcon}</a></li>`
+      )
+      .join("");
+
+    return `<ul class="local-card__links">${rows}</ul>`;
   }
 
   function renderLocalCard(item) {

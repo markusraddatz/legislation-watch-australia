@@ -1275,10 +1275,24 @@ input:focus-visible {
   padding-left: 1.125rem;
   font-size: 0.8125rem;
   line-height: 1.5;
+  list-style: disc;
 }
 
 .local-card__links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   font-weight: 500;
+}
+
+.local-card__links svg,
+.area-profile__links svg,
+.area-profile__reps svg {
+  width: 0.875em;
+  height: 0.875em;
+  flex-shrink: 0;
+  display: inline-block;
+  max-width: none;
 }
 
 /* Calendar reminder actions */
