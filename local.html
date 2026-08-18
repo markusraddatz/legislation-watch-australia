@@ -48,6 +48,7 @@
           <span class="theme-toggle__label">Dark</span>
         </button>
         <nav class="site-nav" aria-label="Primary">
+          <a href="index.html">Home</a>
           <a href="index.html#upcoming">Upcoming</a>
           <a href="local.html" aria-current="page">Local gov</a>
           <a href="index.html#recent-past">Recent &amp; Past</a>
@@ -89,21 +90,23 @@
           <div class="state-tabs" id="local-state-tabs" role="tablist" aria-label="Select state or territory"></div>
         </div>
 
-        <div class="local-search toolbar" id="local-search-panel" role="search" aria-label="Find your council">
-          <label for="local-area-input" class="local-search__label">Find your council</label>
-          <p class="local-search__hint">Enter a WA postcode or suburb to see which council covers your area.</p>
+        <div class="local-search toolbar" id="local-search-panel" role="search" aria-label="Find your area">
+          <label for="local-area-input" class="local-search__label">Your postcode or suburb</label>
+          <p class="local-search__hint">Enter a WA postcode or suburb (e.g. 6065 or Landsdale) to see your council, local representatives, and open consultations.</p>
           <div class="local-search__row">
             <input
               type="search"
               id="local-area-input"
               class="search-input"
-              placeholder="e.g. 6168 or Fremantle"
+              placeholder="e.g. 6065 or Landsdale"
               autocomplete="off"
             >
             <button type="button" class="chip local-search__clear hidden" id="local-area-clear">Clear</button>
           </div>
           <div class="local-council-result hidden" id="local-council-result" aria-live="polite"></div>
         </div>
+
+        <div class="hidden" id="local-area-profile" aria-live="polite"></div>
 
         <p class="results-count" id="local-results-count" aria-live="polite"></p>
         <div class="card-grid card-grid--upcoming" id="local-list"></div>
@@ -123,6 +126,7 @@
   </footer>
 
   <script src="js/data-loader.js"></script>
+  <script src="js/calendar.js"></script>
   <script src="data/wa-council-lookup.js"></script>
   <script src="js/local.js"></script>
 </body>

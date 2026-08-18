@@ -1149,6 +1149,179 @@ input:focus-visible {
   color: var(--color-text-muted);
 }
 
+/* Area profile & council selection */
+
+.area-profile {
+  margin: var(--space-lg) 0;
+  padding: var(--space-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.area-profile__eyebrow {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-subtle);
+}
+
+.area-profile__title {
+  margin: var(--space-xs) 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.area-profile__lead {
+  margin: 0 0 var(--space-md);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.area-profile__section {
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.area-profile__section-title {
+  margin: 0 0 var(--space-sm);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.area-profile__reps {
+  margin: 0;
+  padding-left: 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+.area-profile__reps li + li {
+  margin-top: 0.5rem;
+}
+
+.area-profile__note,
+.area-profile__scrape {
+  margin: var(--space-sm) 0 0;
+  font-size: 0.8125rem;
+  color: var(--color-text-subtle);
+  line-height: 1.5;
+}
+
+.area-profile__links {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.area-profile__links a {
+  font-weight: 500;
+}
+
+.area-profile__change {
+  margin-top: var(--space-md);
+}
+
+.area-select-grid {
+  display: grid;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.area-select-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  width: 100%;
+  padding: var(--space-md);
+  text-align: left;
+  font-family: inherit;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.area-select-card:hover,
+.area-select-card:focus-visible {
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.area-select-card__name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.area-select-card__meta {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.area-select-card__hint {
+  font-size: 0.8125rem;
+  color: var(--color-text-subtle);
+}
+
+.local-card__links {
+  margin: var(--space-sm) 0 0;
+  padding-left: 1.125rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.local-card__links a {
+  font-weight: 500;
+}
+
+/* Calendar reminder actions */
+
+.calendar-actions {
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.btn-calendar {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 var(--space-sm) var(--space-sm) 0;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--color-primary);
+  text-decoration: none;
+  background: var(--color-primary-light);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-calendar:hover {
+  border-color: var(--color-primary);
+}
+
+.btn-calendar--secondary {
+  color: var(--color-text-muted);
+  background: var(--color-surface);
+}
+
+.calendar-actions__note {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--color-text-subtle);
+  line-height: 1.45;
+}
+
 .site-nav a[aria-current="page"] {
   color: var(--color-primary);
   border-bottom-color: var(--color-accent);

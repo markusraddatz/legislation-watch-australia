@@ -7,6 +7,8 @@
     return;
   }
 
+  const calendar = window.LegislationWatchCalendar;
+
   const DATA_PATH = "data/real-data.js";
   const DATA_EXPORT = "LegislationWatchData";
 
@@ -165,8 +167,18 @@
           </a>`
       : `<p class="participant-line">Official participation link not available — check the committee page.</p>`;
 
+    const calendarActions =
+      calendar && item.keyDates?.submissionsClose
+        ? calendar.renderCalendarButtons({
+            title: item.title,
+            isoCloseDate: item.keyDates.submissionsClose,
+            participateUrl: participateUrl,
+            description: item.shortNeutralSummary
+          })
+        : "";
+
     return `
-      <article class="upcoming-card${closingSoon ? " upcoming-card--closing-soon" : ""}" data-id="${item.id}">
+      <article class="upcoming-card${closingSoon ? " upcoming-card--closing-soon" : ""}" data-id="${item.id}" data-close-date="${item.keyDates.submissionsClose || ""}">
         <div class="upcoming-card__body">
           <div class="upcoming-card__meta">
             <span class="badge badge--jurisdiction">${item.jurisdiction}</span>
@@ -179,6 +191,7 @@
           ${keyDatesList ? `<ul class="key-dates">${keyDatesList}</ul>` : ""}
           ${participantText(item.participantInfo)}
           <div class="topic-tags">${topicTags}</div>
+          ${calendarActions}
         </div>
         <div class="upcoming-card__cta">
           ${cta}
@@ -477,6 +490,7 @@
     );
 
     list.innerHTML = filtered.map(renderUpcomingCard).join("");
+    if (calendar) calendar.setupCalendarDownloads(list);
     empty.classList.toggle("hidden", filtered.length > 0);
 
     if (filtered.length === 0) {

@@ -30,5 +30,24 @@
     return match ? match[1] : null;
   }
 
-  global.LegislationWatchLoader = { loadDataModule, peekLastUpdated };
+  /** Load local gov data with optional scrape metadata from /api/local-consultations */
+  async function loadLocalGovData() {
+    const staticData = await loadDataModule("data/local-data.js", "LocalGovWatchData");
+    try {
+      const response = await fetch(`/api/local-consultations?v=${Date.now()}`, { cache: "no-store" });
+      if (response.ok) {
+        const meta = await response.json();
+        return {
+          ...staticData,
+          scrapedAt: meta.scrapedAt || null,
+          scrapeStatus: meta.scrapeStatus || []
+        };
+      }
+    } catch {
+      /* static data only */
+    }
+    return staticData;
+  }
+
+  global.LegislationWatchLoader = { loadDataModule, loadLocalGovData, peekLastUpdated };
 })(window);
