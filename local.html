@@ -66,7 +66,14 @@
           Council-level public consultations live on separate official sites — kept here so the main feed stays focused on
           federal and state/territory items.
         </p>
-        <p class="data-freshness__date" id="local-last-updated"></p>
+        <div class="data-freshness" aria-live="polite">
+          <div class="data-freshness__row">
+            <p class="data-freshness__date" id="local-last-updated">Loading consultations…</p>
+            <button type="button" class="btn-refresh" id="refresh-data-btn" aria-label="Refresh local consultation data">
+              Refresh data
+            </button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -111,11 +118,11 @@
       <p class="footer-lead">
         Always verify deadlines on official council and government websites before submitting feedback.
       </p>
-      <p class="footer-copy">&copy; <span id="current-year"></span> Legislation Watch Australia — prototype</p>
+      <p class="footer-copy">&copy; <span id="current-year"></span> Legislation Watch Australia</p>
     </div>
   </footer>
 
-  <script src="data/local-data.js"></script>
+  <script src="js/data-loader.js"></script>
   <script src="data/wa-council-lookup.js"></script>
   <script src="js/local.js"></script>
 </body>

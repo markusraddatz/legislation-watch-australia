@@ -65,10 +65,15 @@
           We do not host discussion — we only point you to the official channels so you can participate in time.
         </p>
         <div class="data-freshness" aria-live="polite">
-          <p class="data-freshness__date" id="hero-last-updated"></p>
-          <p class="data-freshness__note">
-            Data is drawn from official Australian Parliament and government consultation pages.
-            This prototype is updated manually — always check the official links for the latest deadlines.
+          <div class="data-freshness__row">
+            <p class="data-freshness__date" id="hero-last-updated">Loading consultations…</p>
+            <button type="button" class="btn-refresh" id="refresh-data-btn" aria-label="Refresh consultation data">
+              Refresh data
+            </button>
+          </div>
+          <p class="data-freshness__note" id="hero-data-note">
+            Listings are compiled from official Australian Parliament and government consultation pages.
+            The date above is when we last published an update — always confirm deadlines on the official site before submitting.
           </p>
         </div>
         <div class="hero-stats" id="hero-stats" role="group" aria-label="Quick views"></div>
@@ -143,7 +148,7 @@
       <div class="container about-content">
         <h2 id="about-heading">About Legislation Watch</h2>
         <p>
-          This is an independent informational prototype. We surface official information about
+          Legislation Watch is an independent informational service. We surface official information about
           Australian legislation and public consultation windows, and link directly to official
           participation channels on government and parliamentary websites.
         </p>
@@ -188,11 +193,11 @@
         always use official government and parliamentary channels to participate or verify details.
       </p>
       <p class="footer-note" id="footer-data-freshness"></p>
-      <p class="footer-copy">&copy; <span id="current-year"></span> Legislation Watch Australia — prototype</p>
+      <p class="footer-copy">&copy; <span id="current-year"></span> Legislation Watch Australia</p>
     </div>
   </footer>
 
-  <script src="data/real-data.js"></script>
+  <script src="js/data-loader.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

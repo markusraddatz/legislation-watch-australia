@@ -1,14 +1,22 @@
 (function () {
   "use strict";
 
-  const data = window.LocalGovWatchData;
-  if (!data) {
-    console.error("Local gov page: data/local-data.js must load before js/local.js");
+  const loader = window.LegislationWatchLoader;
+  if (!loader) {
+    console.error("Local gov page: js/data-loader.js must load before js/local.js");
     return;
   }
 
-  const { lastUpdated, localCoverage } = data;
-  const states = localCoverage.states || [];
+  const DATA_PATH = "data/local-data.js";
+  const DATA_EXPORT = "LocalGovWatchData";
+  const PEEK_FIELD = "localLastUpdated";
+
+  let lastUpdated = null;
+  let localCoverage = null;
+  let states = [];
+  let clientRefreshedAt = null;
+  let uiReady = false;
+
   const waLookup = window.WaCouncilLookup;
 
   const STATE_ORDER = ["NSW", "VIC", "QLD", "WA", "SA", "TAS", "ACT", "NT"];
@@ -332,26 +340,125 @@
     });
   }
 
-  function init() {
-    document.getElementById("current-year").textContent = new Date().getFullYear();
-
-    const intro = document.getElementById("local-intro");
-    if (intro) intro.textContent = localCoverage.message;
-
+  function renderDataFreshness() {
     const dateEl = document.getElementById("local-last-updated");
-    if (dateEl && lastUpdated) {
-      dateEl.textContent = `Data last updated: ${formatDate(lastUpdated)}`;
+    if (!dateEl) return;
+
+    if (!lastUpdated) {
+      dateEl.textContent = "Consultation data unavailable";
+      return;
     }
 
-    setupStateTabs();
-    setupAreaSearch();
-    setupThemeToggle();
+    const formatted = formatDate(lastUpdated);
+    const refreshedLabel = clientRefreshedAt
+      ? clientRefreshedAt.toLocaleString("en-AU", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+          hour: "numeric",
+          minute: "2-digit"
+        })
+      : null;
+
+    dateEl.textContent = refreshedLabel
+      ? `Data last updated: ${formatted} · Loaded ${refreshedLabel}`
+      : `Data last updated: ${formatted}`;
+  }
+
+  function applyData(data) {
+    lastUpdated = data.lastUpdated;
+    localCoverage = data.localCoverage;
+    states = localCoverage?.states || [];
+    clientRefreshedAt = new Date();
+
+    const intro = document.getElementById("local-intro");
+    if (intro && localCoverage?.message) {
+      intro.textContent = localCoverage.message;
+    }
+
+    renderDataFreshness();
     render();
   }
 
+  function setRefreshButtonState(state) {
+    const btn = document.getElementById("refresh-data-btn");
+    if (!btn) return;
+    btn.disabled = state === "loading";
+    btn.classList.toggle("btn-refresh--success", state === "success");
+    if (state === "loading") {
+      btn.textContent = "Refreshing…";
+    } else if (state === "success") {
+      btn.textContent = "Up to date";
+      window.setTimeout(() => {
+        btn.classList.remove("btn-refresh--success");
+        btn.textContent = "Refresh data";
+      }, 2500);
+    } else {
+      btn.textContent = "Refresh data";
+    }
+  }
+
+  async function reloadData(options = {}) {
+    const { manual = false, silent = false } = options;
+    const dateEl = document.getElementById("local-last-updated");
+
+    try {
+      if (manual) {
+        setRefreshButtonState("loading");
+      } else if (!silent && dateEl) {
+        dateEl.textContent = "Loading consultations…";
+      }
+
+      if (silent && lastUpdated) {
+        const remoteDate = await loader.peekLastUpdated(DATA_PATH, PEEK_FIELD);
+        if (remoteDate === lastUpdated) return;
+      }
+
+      const data = await loader.loadDataModule(DATA_PATH, DATA_EXPORT);
+      applyData(data);
+
+      if (manual) {
+        setRefreshButtonState("success");
+      }
+    } catch (error) {
+      console.error("Local gov page: failed to load data", error);
+      if (dateEl && !lastUpdated) {
+        dateEl.textContent = "Could not load consultation data";
+      }
+      if (manual) {
+        setRefreshButtonState("idle");
+        window.alert("Could not refresh data. Check your connection and try again.");
+      }
+    }
+  }
+
+  function setupDataRefresh() {
+    document.getElementById("refresh-data-btn")?.addEventListener("click", () => {
+      reloadData({ manual: true });
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible" && uiReady) {
+        reloadData({ silent: true });
+      }
+    });
+  }
+
+  async function bootstrap() {
+    document.getElementById("current-year").textContent = new Date().getFullYear();
+    setupStateTabs();
+    setupAreaSearch();
+    setupThemeToggle();
+    setupDataRefresh();
+    uiReady = true;
+    await reloadData();
+  }
+
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
+    document.addEventListener("DOMContentLoaded", () => {
+      bootstrap();
+    });
   } else {
-    init();
+    bootstrap();
   }
 })();

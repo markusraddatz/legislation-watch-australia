@@ -1,16 +1,24 @@
 (function () {
   "use strict";
 
-  const data = window.LegislationWatchData;
-  if (!data) {
-    console.error("Legislation Watch: data/real-data.js must load before js/app.js");
+  const loader = window.LegislationWatchLoader;
+  if (!loader) {
+    console.error("Legislation Watch: js/data-loader.js must load before js/app.js");
     return;
   }
 
-  const { lastUpdated, upcomingItems, pastItems, stateCoverage } = data;
+  const DATA_PATH = "data/real-data.js";
+  const DATA_EXPORT = "LegislationWatchData";
+
+  let lastUpdated = null;
+  let upcomingItems = [];
+  let pastItems = [];
+  let stateCoverage = null;
+  let clientRefreshedAt = null;
 
   let activeFilter = "closing-soon";
   let activeStateTab = "all";
+  let uiReady = false;
 
   const STATE_CODES = ["NSW", "VIC", "QLD", "WA", "SA", "TAS", "ACT", "NT"];
 
@@ -536,14 +544,29 @@
   }
 
   function renderDataFreshness() {
-    if (!lastUpdated) return;
-
-    const formatted = formatDate(lastUpdated);
     const heroDate = document.getElementById("hero-last-updated");
     const footerNote = document.getElementById("footer-data-freshness");
 
+    if (!lastUpdated) {
+      if (heroDate) heroDate.textContent = "Consultation data unavailable";
+      return;
+    }
+
+    const formatted = formatDate(lastUpdated);
+    const refreshedLabel = clientRefreshedAt
+      ? clientRefreshedAt.toLocaleString("en-AU", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+          hour: "numeric",
+          minute: "2-digit"
+        })
+      : null;
+
     if (heroDate) {
-      heroDate.textContent = `Data last updated: ${formatted}`;
+      heroDate.textContent = refreshedLabel
+        ? `Data last updated: ${formatted} · Loaded ${refreshedLabel}`
+        : `Data last updated: ${formatted}`;
     }
     if (footerNote) {
       footerNote.textContent =
@@ -551,22 +574,99 @@
     }
   }
 
-  function init() {
-    document.getElementById("current-year").textContent = new Date().getFullYear();
+  function applyData(data) {
+    lastUpdated = data.lastUpdated;
+    upcomingItems = data.upcomingItems || [];
+    pastItems = data.pastItems || [];
+    stateCoverage = data.stateCoverage;
+    clientRefreshedAt = new Date();
     renderDataFreshness();
     renderHeroStats();
-    setupHeroStats();
     renderUpcoming();
     renderPast();
-    setupFilters();
-    setupStateTabs();
-    setupThemeToggle();
     syncHeroStatHighlight();
   }
 
+  function setRefreshButtonState(state) {
+    const btn = document.getElementById("refresh-data-btn");
+    if (!btn) return;
+    btn.disabled = state === "loading";
+    btn.classList.toggle("btn-refresh--success", state === "success");
+    if (state === "loading") {
+      btn.textContent = "Refreshing…";
+    } else if (state === "success") {
+      btn.textContent = "Up to date";
+      window.setTimeout(() => {
+        btn.classList.remove("btn-refresh--success");
+        btn.textContent = "Refresh data";
+      }, 2500);
+    } else {
+      btn.textContent = "Refresh data";
+    }
+  }
+
+  async function reloadData(options = {}) {
+    const { manual = false, silent = false } = options;
+    const heroDate = document.getElementById("hero-last-updated");
+
+    try {
+      if (manual) {
+        setRefreshButtonState("loading");
+      } else if (!silent && heroDate) {
+        heroDate.textContent = "Loading consultations…";
+      }
+
+      if (silent && lastUpdated) {
+        const remoteDate = await loader.peekLastUpdated(DATA_PATH);
+        if (remoteDate === lastUpdated) return;
+      }
+
+      const data = await loader.loadDataModule(DATA_PATH, DATA_EXPORT);
+      applyData(data);
+
+      if (manual) {
+        setRefreshButtonState("success");
+      }
+    } catch (error) {
+      console.error("Legislation Watch: failed to load data", error);
+      if (heroDate && !lastUpdated) {
+        heroDate.textContent = "Could not load consultation data";
+      }
+      if (manual) {
+        setRefreshButtonState("idle");
+        window.alert("Could not refresh data. Check your connection and try again.");
+      }
+    }
+  }
+
+  function setupDataRefresh() {
+    document.getElementById("refresh-data-btn")?.addEventListener("click", () => {
+      reloadData({ manual: true });
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible" && uiReady) {
+        reloadData({ silent: true });
+      }
+    });
+  }
+
+  async function bootstrap() {
+    document.getElementById("current-year").textContent = new Date().getFullYear();
+    setupFilters();
+    setupHeroStats();
+    setupStateTabs();
+    setupThemeToggle();
+    setupDataRefresh();
+    uiReady = true;
+    await reloadData();
+  }
+
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
+    document.addEventListener("DOMContentLoaded", () => {
+      bootstrap();
+    });
   } else {
-    init();
+    bootstrap();
   }
 })();
