@@ -1,0 +1,12 @@
+# Optional — Cloudflare Pages does not require wrangler.toml for Git-connected static sites.
+# Use this file only if you deploy from the CLI: npx wrangler pages deploy .
+#
+# Dashboard settings (recommended):
+#   Framework preset: None
+#   Build command: (leave empty)
+#   Build output directory: /
+#   Root directory: / (repository root — index.html lives here)
+
+name = "legislation-watch-australia"
+compatibility_date = "2024-08-01"
+pages_build_output_dir = "."

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Local government and council public consultations across Australia — official sources only.">
+  <title>Local government consultations — Legislation Watch Australia</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <script>
+    (function () {
+      var saved = localStorage.getItem("legislation-watch-theme");
+      if (saved === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <svg class="brand-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <rect x="4" y="6" width="24" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="10" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="10" y1="16" x2="22" y2="16" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="10" y1="20" x2="18" y2="20" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+        <span class="brand-name">Legislation Watch Australia</span>
+      </a>
+      <div class="header-actions">
+        <button
+          type="button"
+          id="theme-toggle"
+          class="theme-toggle"
+          aria-label="Switch to dark theme"
+          aria-pressed="false"
+        >
+          <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.75"/>
+            <path fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+          </svg>
+          <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M21 14.5A8.5 8.5 0 0 1 9.5 3 7 7 0 1 0 21 14.5z"/>
+          </svg>
+          <span class="theme-toggle__label">Dark</span>
+        </button>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="index.html#upcoming">Upcoming</a>
+          <a href="local.html" aria-current="page">Local gov</a>
+          <a href="index.html#recent-past">Recent &amp; Past</a>
+          <a href="index.html#about">About</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="hero hero--compact">
+      <div class="container">
+        <p class="hero-eyebrow"><a href="index.html">← Back to all consultations</a></p>
+        <h1 class="hero-page-title">Local government &amp; council consultations</h1>
+        <p class="hero-statement">
+          Council-level public consultations live on separate official sites — kept here so the main feed stays focused on
+          federal and state/territory items.
+        </p>
+        <p class="data-freshness__date" id="local-last-updated"></p>
+      </div>
+    </section>
+
+    <section class="section section-local" aria-labelledby="local-heading">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-label">By state or territory</span>
+          <h2 id="local-heading">Browse by area</h2>
+          <p class="section-desc" id="local-intro"></p>
+        </header>
+
+        <div class="state-panel state-panel--page" id="local-state-panel">
+          <div class="state-tabs" id="local-state-tabs" role="tablist" aria-label="Select state or territory"></div>
+        </div>
+
+        <div class="local-search toolbar" id="local-search-panel" role="search" aria-label="Find your council">
+          <label for="local-area-input" class="local-search__label">Find your council</label>
+          <p class="local-search__hint">Enter a WA postcode or suburb to see which council covers your area.</p>
+          <div class="local-search__row">
+            <input
+              type="search"
+              id="local-area-input"
+              class="search-input"
+              placeholder="e.g. 6168 or Fremantle"
+              autocomplete="off"
+            >
+            <button type="button" class="chip local-search__clear hidden" id="local-area-clear">Clear</button>
+          </div>
+          <div class="local-council-result hidden" id="local-council-result" aria-live="polite"></div>
+        </div>
+
+        <p class="results-count" id="local-results-count" aria-live="polite"></p>
+        <div class="card-grid card-grid--upcoming" id="local-list"></div>
+        <div class="local-portals" id="local-portals"></div>
+        <p class="empty-state hidden" id="local-empty"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-lead">
+        Always verify deadlines on official council and government websites before submitting feedback.
+      </p>
+      <p class="footer-copy">&copy; <span id="current-year"></span> Legislation Watch Australia — prototype</p>
+    </div>
+  </footer>
+
+  <script src="data/local-data.js"></script>
+  <script src="data/wa-council-lookup.js"></script>
+  <script src="js/local.js"></script>
+</body>
+</html>
